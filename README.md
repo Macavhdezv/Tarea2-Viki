@@ -1,2 +1,2 @@
-# Tarea 2 - Letterboxd
+# Tarea 2 - Viki
 Clase ICP5006
