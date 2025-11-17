@@ -5,15 +5,8 @@
 library("dplyr")
 library("ggplot2")
 library("tidyverse")
-library("ggrepel")
 library("tidyr")
-library("stringr")
 library("showtext")
-library("ggimage")
-library("sysfonts")
-
-install.packages("cowplot")
-
 
 #Se sube la base de datos
 
@@ -33,8 +26,7 @@ viki_limpia <- viki_limpia |>
   filter(genres != "['reality']") |> 
   filter(tmdb_popularity >= 10.000) 
 
-
-#Ahora vamos a ordenar la base de datos segun el orden descendente del puntaje de TMDB
+#Ahora vamos a ordenar la base de datos segÚn el orden descendente del puntaje de TMDB
 
 viki_limpia <- viki_limpia |> 
   arrange(desc(tmdb_score))
@@ -54,45 +46,23 @@ viki_final <- viki_final |>
     genres = sapply(genres, function(x) x[1])           # Tomar solo el primer género
   )
 
-#Ahora empezaremos con el gráfico
+#Ahora se empieza a trabajar con el gráfico, subiendo nuevas tipografías
+
+showtext_auto()
 
 font_add_google("Montserrat", "mont")
-showtext_auto()
-
-font_add_google("Poppins", "poppins")
-showtext_auto()
-
 font_add_google("Poppins", "poppins")
 font_add_google("DM Sans", "dmsans")
 font_add_google("Nanum Gothic", "nanumg")
 
-colores_generos <- c(
-  scifi = "#dodgerblue",
-  comedy = "#CD1076",
-  drama = "#CD5555",
-  war = "#CDB79E"
-)
 
-  # Colores personalizados
-
+# Ordenar de mayor a menor para mantener el ranking en la nueva base de datos
 
 viki_final <- viki_final |>
   arrange(desc(tmdb_score))
 
-# Ordenar de mayor a menor para mantener el ranking
-viki_final <- viki_final |>
-  arrange(desc(tmdb_score))
 
-#Este true
-
-# ACTIVAR SHOWTEXT Y AÑADIR TIPOGRAFÍAS
-showtext_auto()
-
-font_add_google("Poppins", "poppins")
-font_add_google("Nanum Gothic", "nanumg")
-font_add_google("DM Sans", "dmsans")
-
-# hACER UN GRÁFICO
+#Comenzando con el gráfico, empezamos definiendo los colores para cada género
 
 colores_generos <- c(
   scifi = "#A7C7E7",
@@ -100,6 +70,8 @@ colores_generos <- c(
   drama = "#F5CBA7",
   war = "#C9E4C5"
 )
+
+#Ahora se comienza a hacer el gráfico de barras horizontal
 
 ggplot(viki_final,
        aes(x = tmdb_score,
@@ -109,19 +81,21 @@ ggplot(viki_final,
   # BARRAS
   geom_col() +
   
-  # TEXTO DENTRO DE LA BARRA
+  # Texto dentro de la barra
   geom_text(
     aes(
-      label = title,      # mitad exacta de la barra
+      label = title,     
     ),
     family = "nanumg",
     color = "white",
     size = 4,
-    hjust = 1.1               # centrado dentro de la barra horizontal
+    hjust = 1.1               
   ) +
   
   # COLORES MANUALES
   scale_fill_manual(values = colores_generos) +
+  
+  #títulos de las variables y gráfico
   
   labs(
     title = "2016: LOS K-DRAMAS DE ORO",
